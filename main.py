@@ -1,20 +1,7 @@
 from fastapi import FastAPI, Response, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List
 from uuid import UUID
-
 from Models.UserDTO import User
-
-db: List[User] = [
-    User(id="7443a1e7-9ccd-4ea3-a5ed-187d6a14c82c", fullname="John Doe", username="johndoe", email="john@email.com", password="password",
-         address="123 Main St."),
-    User(id="6f59ab7d-a868-48a1-ab48-70c67b999841", fullname="Jane Doe", username="janedoe", email="jane@email.com", password="password",
-         address="123 Main St.")
-]
-
-app = FastAPI()
-
-
 from Core.Model import (
     fetch_one_user,
     fetch_all_users,
@@ -23,13 +10,14 @@ from Core.Model import (
     remove_user
 )
 
-
 # CORS
 origins = [
     "http://localhost:3000",
     "http://localhost:3001",
     "http://localhost"
 ]
+
+app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
@@ -54,13 +42,17 @@ async def get_users():
 @app.get("/users/{user_id}")
 async def get_user(user_id: UUID):
     user = await fetch_one_user(user_id)
-    return user
+    if user:
+        return user
+    raise HTTPException(status_code=404, detail="Users not found")
 
 
 @app.post("/users", status_code=201)
 async def add_user(user: User):
-    await create_user(user)
-    return user
+    response = await create_user(user)
+    if response:
+        return user
+    raise HTTPException(status_code=400, detail="Bad request")
 
 
 @app.put("/users/{user_id}")

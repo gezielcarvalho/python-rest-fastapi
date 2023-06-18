@@ -19,14 +19,16 @@ collection = database.get_collection("users_collection")
 async def fetch_one_user(user_id: UUID):
     binary_uuid = Binary.from_uuid(user_id)  # Convert UUID to bson.Binary
     document = await collection.find_one({"id": binary_uuid})
-    return {
-        "id": user_id,
-        "fullname": document['fullname'],
-        "username": document['username'],
-        "email": document['email'],
-        "password": document['password'],
-        "address": document['address']
-    }
+    if document:
+        return {
+            "id": user_id,
+            "fullname": document['fullname'],
+            "username": document['username'],
+            "email": document['email'],
+            "password": document['password'],
+            "address": document['address']
+        }
+    return None
 
 
 async def fetch_all_users():
