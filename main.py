@@ -1,9 +1,9 @@
-from fastapi import FastAPI, Response, HTTPException
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from uuid import UUID
-from Models.UserDTO import UserDTO
+from App.Models.UserDTO import UserDTO
 import Core.Model as Model
-import App.User as App
+import App.Models.User as App
 from dotenv import load_dotenv
 load_dotenv()
 

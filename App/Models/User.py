@@ -4,7 +4,7 @@ from Core.Model import Model
 from bson import Binary
 from uuid import UUID, uuid4
 
-from Models.UserDTO import UserDTO
+from App.Models.UserDTO import UserDTO
 
 
 class User(Model):
@@ -21,7 +21,6 @@ class User(Model):
                 "fullname": document['fullname'],
                 "username": document['username'],
                 "email": document['email'],
-                "password": document['password'],
                 "address": document['address']
             }
         return None
@@ -35,7 +34,6 @@ class User(Model):
                 "fullname": document['fullname'],
                 "username": document['username'],
                 "email": document['email'],
-                "password": document['password'],
                 "address": document['address']
             })
         return documents
@@ -56,7 +54,6 @@ class User(Model):
             "fullname": document['fullname'],
             "username": document['username'],
             "email": document['email'],
-            "password": document['password'],
             "address": document['address']
         }
 
