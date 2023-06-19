@@ -24,7 +24,7 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-user_controller = UserController(None)
+user_controller = UserController()
 
 
 @app.get("/")

@@ -1,9 +1,11 @@
+from Core.View import View
+
+
 class Controller:
 
-    def __init__(self, model, view):
+    def __init__(self, model):
         self.model = model
-        self.view = view
 
     @staticmethod
     def health_check():
-        return {"status": "OK"}
+        return View.render({"status": "OK"})

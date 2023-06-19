@@ -8,9 +8,9 @@ from Core.Controller import Controller
 
 class UserController(Controller):
 
-    def __init__(self, view):
+    def __init__(self):
         user = User()
-        super().__init__(user, view)
+        super().__init__(user)
 
     async def get_users(self):
         users = await self.model.fetch_all_users()
