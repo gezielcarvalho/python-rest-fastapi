@@ -1,12 +1,11 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from uuid import UUID
 from App.Models.UserDTO import UserDTO
-import Core.Model as Model
-import App.Models.User as App
+from Core.Controller import Controller
+from App.Controllers.UserController import UserController
 from dotenv import load_dotenv
 load_dotenv()
-
 
 # CORS
 origins = [
@@ -25,52 +24,34 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-model = Model.Model()
-
-user = App.User()
+user_controller = UserController(None)
 
 
 @app.get("/")
-async def root():
-    return {"message": "root"}
+async def health_check():
+    return Controller.health_check()
 
 
 @app.get("/users")
 async def get_users():
-    users = await user.fetch_all_users()
-    return users
+    return await user_controller.get_users()
 
 
 @app.get("/users/{user_id}")
 async def get_user(user_id: UUID):
-    response = await user.fetch_one_user(user_id)
-    if response:
-        return response
-    raise HTTPException(status_code=404, detail="Users not found")
+    return await user_controller.get_user(user_id)
 
 
 @app.post("/users", status_code=201)
 async def add_user(user_to_add: UserDTO):
-    response = await user.create_user(user_to_add)
-    if response:
-        return user_to_add
-    raise HTTPException(status_code=400, detail="Bad request")
+    return await user_controller.add_user(user_to_add)
 
 
 @app.put("/users/{user_id}")
 async def save_user(user_id: UUID, user_to_save: UserDTO):
-    response = await user.fetch_one_user(user_id)
-    if response:
-        update_data = user_to_save.dict(exclude_unset=True)
-        updated_user = await user.update_user(user_id, update_data)
-        return updated_user
-    raise HTTPException(status_code=404, detail="User not found")
+    return await user_controller.save_user(user_id, user_to_save)
 
 
-@app.delete("/users/{user_id}")
+@app.delete("/users/{user_id}", status_code=204)
 async def delete_user(user_id: UUID):
-    response = await user.fetch_one_user(user_id)
-    if user:
-        await user.remove_user(user_id)
-        return {"message": "User deleted successfully"}
-    raise HTTPException(status_code=404, detail="User not found")
+    return await user_controller.remove_user(user_id)
