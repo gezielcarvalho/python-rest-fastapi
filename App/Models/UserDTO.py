@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from uuid import UUID, uuid4
 
 
-class User(BaseModel):
+class UserDTO(BaseModel):
     id: Optional[UUID] = uuid4()
     fullname: str
     username: str
