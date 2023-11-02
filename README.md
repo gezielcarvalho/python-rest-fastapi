@@ -14,7 +14,7 @@ This is a simple REST API written in Python, using fastAPI and MongoDB, for inst
 ## Installation
 1. Clone this repository
 2. Install the requirements
-3. Run the server
+3. Run the server (uvicorn main:app --reload)
 4. Open your browser and go to http://localhost:8000/docs
 5. Enjoy!
 
